@@ -80,6 +80,9 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
+        if ($course->students()->count() > 0) {
+            return redirect()->route('courses.index')->with('error', 'Cannot delete course with enrolled students.');
+        }
         $course->delete();
 
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');

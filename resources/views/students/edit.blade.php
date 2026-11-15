@@ -5,9 +5,9 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div>
                 <h2 class="h4 fw-bold text-dark mb-1">Edit Student</h2>
-                <p class="text-secondary small mb-0">Update information for Ahmed Mahmoud</p>
+                <p class="text-secondary small mb-0">Update information for {{ $student->name }}</p>
             </div>
-            <a href="students/index.php" class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('students.index') }}" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-arrow-left me-1"></i> Back to List
             </a>
         </div>
@@ -15,11 +15,13 @@
         <div class="card shadow-sm">
             <div class="card-header bg-white py-3">
                 <span class="fw-semibold text-dark">
-                    <i class="bi bi-pencil-square me-2 text-warning"></i> Edit Student #1
+                    <i class="bi bi-pencil-square me-2 text-warning"></i> Edit Student #{{ $student->id }}
                 </span>
             </div>
             <div class="card-body p-4">
-                <form action="students/edit.php?id=1" method="POST">
+                <form action="{{ route('students.update',$student) }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     <!-- Name Field -->
                     <div class="mb-3">
                         <label for="name" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
@@ -27,9 +29,11 @@
                             name="name"
                             id="name"
                             class="form-control"
-                            value="Ahmed Mahmoud"
-                            required>
+                            value="{{ old('name', $student->name) }}">
                     </div>
+                    @error('name')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
 
                     <!-- Email Field -->
                     <div class="mb-3">
@@ -38,9 +42,11 @@
                             name="email"
                             id="email"
                             class="form-control"
-                            value="ahmedmahmoud@gmail.com"
-                            required>
+                            value="{{ old('email', $student->email) }}">
                     </div>
+                    @error('email')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
 
                     <!-- Phone Field -->
                     <div class="mb-4">
@@ -49,11 +55,28 @@
                             name="phone"
                             id="phone"
                             class="form-control"
-                            value="01150673012">
+                            value="{{ old('phone', $student->phone) }}">
                     </div>
+                    @error('phone')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                    <div class="mb-3">
+                        <label for="course_id" class="form-label small fw-medium">Select Course</label>
+                        <select name="course_id" id="course_id" class="form-select form-select-sm" required>
+                            <option value="">-- Choose Course --</option>
+                            @foreach ($courses as $course)
+                            <option value="{{ $course->id }}" {{ old('course_id', $student->course_id) == $course->id ? 'selected' : '' }}>
+                                {{ $course->title }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('course_id')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
 
                     <div class="d-flex justify-content-end gap-2 pt-2 border-top">
-                        <a href="students/index.php" class="btn btn-light px-4 border">Cancel</a>
+                        <a href="{{ route('students.index') }}" class="btn btn-light px-4 border">Cancel</a>
                         <button type="submit" class="btn btn-primary px-4">
                             <i class="bi bi-check-lg me-1"></i> Update Student
                         </button>

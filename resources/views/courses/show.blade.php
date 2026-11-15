@@ -83,9 +83,9 @@
                         <tr>
                             <td>
                                 <div class="fw-semibold text-dark">
-                                    <a href="{{ route('students.show',$student) }}" class="text-dark text-decoration-none">
-                                        {{ $student['name'] }}
-                                    </a>
+
+                                    {{ $student['name'] }}
+
                                 </div>
                                 <small class="text-muted">{{ $student['email'] }}</small>
                             </td>

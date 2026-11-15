@@ -10,17 +10,17 @@
 
     <!-- Navigation Links -->
     <nav class="nav flex-column">
-        <a href="{{ route('dashboard') }}" class="nav-link active">
+        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid-1x2-fill"></i>
             <span>Dashboard</span>
         </a>
 
-        <a href="{{ route('students.index') }}" class="nav-link">
+        <a href="{{ route('students.index') }}" class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}">
             <i class="bi bi-people-fill"></i>
             <span>Students</span>
         </a>
 
-        <a href="{{ route('courses.index') }}" class="nav-link">
+        <a href="{{ route('courses.index') }}" class="nav-link  {{ request()->routeIs('courses.*') ? 'active' : '' }}">
             <i class="bi bi-journal-bookmark-fill"></i>
             <span>Courses</span>
         </a>

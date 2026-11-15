@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::with('course')->paginate(10);
+        return view('students.index', compact('students'));
     }
 
     /**
@@ -20,7 +22,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $courses = Course::select('id', 'title')->orderBy('title')->get();
+        return view('students.create', compact('courses'));
     }
 
     /**
@@ -28,23 +31,30 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:255|unique:students,email',
+            'phone' => 'nullable|string|max:20',
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        Student::create($validatedData);
+
+        return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
-    {
-        //
-    }
+    public function show(Student $student) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Student $student)
     {
-        //
+        $courses = Course::select('id', 'title')->orderBy('title')->get();
+        return view('students.edit', compact('student', 'courses'));
     }
 
     /**
@@ -52,7 +62,16 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:255|unique:students,email,' . $student->id,
+            'phone' => 'nullable|string|max:20',
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        $student->update($validatedData);
+
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
 
     /**
@@ -60,6 +79,8 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+
+        return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
     }
 }

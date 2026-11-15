@@ -8,7 +8,7 @@
                 <h2 class="h4 fw-bold text-dark mb-1">Add New Student</h2>
                 <p class="text-secondary small mb-0">Fill in the details below to register a new student.</p>
             </div>
-            <a href="students/index.php" class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('students.index') }}" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-arrow-left me-1"></i> Back to List
             </a>
         </div>
@@ -20,7 +20,8 @@
                 </span>
             </div>
             <div class="card-body p-4">
-                <form action="students/store.php" method="POST">
+                <form action="{{ route('students.store') }}" method="POST">
+                    @csrf
                     <!-- Name Field -->
                     <div class="mb-3">
                         <label for="name" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
@@ -29,8 +30,11 @@
                             id="name"
                             class="form-control"
                             placeholder="e.g. John Doe"
-                            required>
+                            value="{{ old('name') }}">
                     </div>
+                    @error('name')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
 
                     <!-- Email Field -->
                     <div class="mb-3">
@@ -40,9 +44,12 @@
                             id="email"
                             class="form-control"
                             placeholder="e.g. john.doe@example.com"
-                            required>
+                            value="{{ old('email') }}">
                         <div class="form-text">Each student must have a unique email address.</div>
                     </div>
+                    @error('email')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
 
                     <!-- Phone Field -->
                     <div class="mb-4">
@@ -51,13 +58,31 @@
                             name="phone"
                             id="phone"
                             class="form-control"
+                            value="{{ old('phone') }}"
                             placeholder="e.g. +1 555-0199 or 01012345678">
                         <div class="form-text">Optional contact phone number.</div>
                     </div>
+                    @error('phone')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                    <div class="mb-3">
+                        <label for="course_id" class="form-label small fw-medium">Select Course</label>
+                        <select name="course_id" id="course_id" class="form-select form-select-sm" required>
+                            <option value="">-- Choose Course --</option>
+                            @foreach ($courses as $course)
+                            <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                {{ $course->title }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('course_id')
+                    <div class="text-danger small">{{ $message }}</div>
+                    @enderror
 
                     <div class="d-flex justify-content-end gap-2 pt-2 border-top">
-                        <a href="students/index.php" class="btn btn-light px-4 border">Cancel</a>
-                        <button type="submit" name="submit" class="btn btn-primary px-4">
+                        <a href="{{ route('students.index') }}" class="btn btn-light px-4 border">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">
                             <i class="bi bi-save me-1"></i> Save Student
                         </button>
                     </div>
