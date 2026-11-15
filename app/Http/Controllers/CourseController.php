@@ -12,7 +12,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::withCount('students')->get();
+        return view('courses.index', compact('courses'));
     }
 
     /**
@@ -20,7 +21,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        return view('courses.create');
     }
 
     /**
@@ -28,7 +29,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:100|unique:courses,title',
+            'duration' => 'required|int|min:1',
+            'price' => 'required|numeric|min:0.00',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        Course::create($validatedData);
+
+        return redirect()->route('courses.index')->with('success', 'Course created successfully.');
     }
 
     /**
@@ -36,7 +46,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        $course->load('students')->loadCount('students');
+        return view('courses.show', compact('course'));
     }
 
     /**
@@ -44,7 +55,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        return view('courses.edit', compact('course'));
     }
 
     /**
@@ -52,7 +63,16 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:100|unique:courses,title,' . $course->id,
+            'duration' => 'required|int|min:1',
+            'price' => 'required|numeric|min:0.00',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        $course->update($validatedData);
+
+        return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
     }
 
     /**
@@ -60,6 +80,8 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+
+        return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
     }
 }

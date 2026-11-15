@@ -46,11 +46,8 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <span class="badge bg-light text-secondary border px-3 py-2 d-none d-sm-inline-flex align-items-center">
-                        <i class="bi bi-calendar3 me-2"></i> 2026-10-4
+                        <i class="bi bi-calendar3 me-2"></i> {{ \Carbon\Carbon::now()->format('Y m d') }}
                     </span>
-                    <a href="enrollments/create.php" class="btn btn-primary btn-sm px-3 shadow-sm">
-                        <i class="bi bi-plus-lg me-1"></i> Enroll Student
-                    </a>
                 </div>
             </header>
 

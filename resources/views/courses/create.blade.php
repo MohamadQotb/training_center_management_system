@@ -5,9 +5,9 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div>
                 <h2 class="h4 fw-bold text-dark mb-1">Create New Course</h2>
-                <p class="text-secondary small mb-0">Define course title, curriculum details, and price.</p>
+                <p class="text-secondary small mb-0">Define course title, curriculum details, price, and Duration.</p>
             </div>
-            <a href="courses/index.php" class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('courses.index') }}" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-arrow-left me-1"></i> Back to Courses
             </a>
         </div>
@@ -19,7 +19,8 @@
                 </span>
             </div>
             <div class="card-body p-4">
-                <form action="courses/create.php" method="POST">
+                <form action="{{ route('courses.store') }}" method="POST">
+                    @csrf
                     <!-- Title Field -->
                     <div class="mb-3">
                         <label for="title" class="form-label fw-medium">Course Title <span class="text-danger">*</span></label>
@@ -27,10 +28,12 @@
                             name="title"
                             id="title"
                             class="form-control"
-                            value="PHP Crash Course"
-                            placeholder="e.g. Master Web Development with PHP & MySQL"
-                            required>
+                            value="{{ old('title') }}"
+                            placeholder="e.g. Master Web Development with PHP & MySQL">
                     </div>
+                    @error('title')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
 
                     <!-- Price Field -->
                     <div class="mb-3">
@@ -43,13 +46,32 @@
                                 name="price"
                                 id="price"
                                 class="form-control"
-                                value="0"
-                                placeholder="0.00"
-                                required>
+                                value="{{ old('price', '0.00') }}"
+                                placeholder="0.00">
                         </div>
                         <div class="form-text">Enter 0 for free training courses.</div>
                     </div>
-
+                    @error('price')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                    <!-- Duration Field -->
+                    <div class="mb-3">
+                        <label for="duration" class="form-label fw-medium">Duration (Hr) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number"
+                                step="1"
+                                min="0"
+                                name="duration"
+                                id="duration"
+                                class="form-control"
+                                value="{{ old('duration', '0') }}"
+                                placeholder="0">
+                        </div>
+                    </div>
+                    @error('duration')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                     <!-- Description Field -->
                     <div class="mb-4">
                         <label for="description" class="form-label fw-medium">Description</label>
@@ -57,11 +79,14 @@
                             id="description"
                             rows="4"
                             class="form-control"
-                            placeholder="Provide an overview of topics covered in this course...">Learn PHP from scratch and build web applications.</textarea>
+                            placeholder="Provide an overview of topics covered in this course...">{{ old('description') }}</textarea>
                     </div>
+                    @error('description')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
 
                     <div class="d-flex justify-content-end gap-2 pt-2 border-top">
-                        <a href="courses/index.php" class="btn btn-light px-4 border">Cancel</a>
+                        <a href="{{ route('courses.index') }}" class="btn btn-light px-4 border">Cancel</a>
                         <button type="submit" class="btn btn-success px-4">
                             <i class="bi bi-save me-1"></i> Save Course
                         </button>
