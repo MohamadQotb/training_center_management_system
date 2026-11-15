@@ -2,7 +2,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="h4 fw-bold text-dark mb-1">{{ $course['id'] }}</h2>
+        <h2 class="h4 fw-bold text-dark mb-1">{{ $course['title'] }}</h2>
         <p class="text-secondary small mb-0">Course Overview & Enrolled Student Roster</p>
     </div>
     <div class="d-flex gap-2">
@@ -73,7 +73,7 @@
 
 
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">
+                            <td colspan="2" class="text-center py-4 text-muted">
                                 No students are enrolled in this course yet.
                             </td>
                         </tr>

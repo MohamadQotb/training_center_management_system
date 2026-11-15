@@ -58,10 +58,10 @@
                     <div class="mb-3">
                         <label for="duration" class="form-label fw-medium">Duration (Hr) <span class="text-danger">*</span></label>
                         <div class="input-group">
-                            <span class="input-group-text">$</span>
+                            <span class="input-group-text">Hr</span>
                             <input type="number"
                                 step="1"
-                                min="0"
+                                min="1"
                                 name="duration"
                                 id="duration"
                                 class="form-control"

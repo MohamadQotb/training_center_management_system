@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="h4 fw-bold">Course Catalog (Course Number)</h2>
+    <h2 class="h4 fw-bold">Course Catalog ({{ $courses->count() }})</h2>
     <a href="{{ route('courses.create') }}" class="btn btn-success">Add Course</a>
 </div>
 @if(session('success'))
@@ -33,7 +33,7 @@
             <tbody>
                 @if($courses->isEmpty())
                 <tr>
-                    <td colspan="5" class="text-center py-4 text-muted">No courses found yet.</td>
+                    <td colspan="6" class="text-center py-4 text-muted">No courses found yet.</td>
                 </tr>
                 @else
                 @foreach($courses as $course)
@@ -41,7 +41,7 @@
                     <td>{{ $course['id'] }}</td>
                     <td><a href="{{ route('courses.show',$course) }}">{{ $course['title'] }}</a></td>
                     <td>${{ $course['price'] }}</td>
-                    <td>${{ $course['duration'] }}</td>
+                    <td>{{ $course['duration'] }}</td>
                     <td>{{ $course['students_count'] }}</td>
                     <td class="text-end">
                         <a href="{{ route('courses.show',$course) }}" class="btn btn-outline-info btn-sm">View</a>

@@ -60,9 +60,9 @@
                     @error('phone')
                     <div class="text-danger small">{{ $message }}</div>
                     @enderror
-                    <div class="mb-3">
-                        <label for="course_id" class="form-label small fw-medium">Select Course</label>
-                        <select name="course_id" id="course_id" class="form-select form-select-sm" required>
+                    <div class="mb-4">
+                        <label for="course_id" class="form-label fw-medium">Select Course <span class="text-danger">*</span></label>
+                        <select name="course_id" id="course_id" class="form-select" required>
                             <option value="">-- Choose Course --</option>
                             @foreach ($courses as $course)
                             <option value="{{ $course->id }}" {{ old('course_id', $student->course_id) == $course->id ? 'selected' : '' }}>

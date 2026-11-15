@@ -15,6 +15,31 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
+<form action="{{ route('students.index') }}" method="GET" class="row g-3 mb-4">
+    <div class="col-md-5">
+        <input type="text"
+            name="search"
+            value="{{ request('search') }}"
+            class="form-control"
+            placeholder="Search student by name...">
+    </div>
+    <div class="col-md-4">
+        <select name="course_id" class="form-select">
+            <option value="">All Courses</option>
+            @foreach($courses as $course)
+            <option value="{{ $course->id }}" @selected(request('course_id')==$course->id)>
+                {{ $course->title }}
+            </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+        @if(request()->filled('search') || request()->filled('course_id'))
+        <a href="{{ route('students.index') }}" class="btn btn-outline-secondary">Reset</a>
+        @endif
+    </div>
+</form>
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span class="fw-semibold text-dark">
@@ -37,7 +62,11 @@
                 @if ($students->isEmpty())
                 <tr>
                     <td colspan="6" class="text-center py-4 text-muted">
+                        @if(request()->filled('search') || request()->filled('course_id'))
+                        No students found matching your search criteria.
+                        @else
                         No students registered yet. Click "Add Student" to create the first record.
+                        @endif
                     </td>
                 </tr>
                 @else
@@ -46,7 +75,7 @@
 
                     <td class="text-secondary fw-semibold">#{{ $student['id'] }}</td>
                     <td class="fw-semibold text-dark">{{ $student['name'] }}</td>
-                    </td>
+
                     <td>{{ $student['email'] }}</td>
                     <td>{{ $student['phone']?? "N/A" }}</td>
                     <td>
@@ -79,6 +108,10 @@
         </table>
 
     </div>
-    {{ $students->links() }}
+    @if($students->hasPages())
+    <div class="card-footer bg-white py-3">
+        {{ $students->links() }}
+    </div>
+    @endif
 </div>
 @endsection

@@ -11,10 +11,16 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with('course')->paginate(10);
-        return view('students.index', compact('students'));
+        $students = Student::with('course')->when($request->filled('search'), function ($query)
+        use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        })->when($request->filled('course_id'), function ($query) use ($request) {
+            $query->where('course_id', $request->course_id);
+        })->latest()->paginate(10)->withQueryString();
+        $courses = Course::select('id', 'title')->orderBy('title')->get();
+        return view('students.index', compact('students', 'courses'));
     }
 
     /**
